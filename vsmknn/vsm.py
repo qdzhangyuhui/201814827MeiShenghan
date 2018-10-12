@@ -4,7 +4,6 @@ from nltk.corpus import stopwords
 import re
 import string
 import os
-import codecs
 import math
 import json
 
@@ -18,11 +17,12 @@ def cata(filepath):
     return files
 
 
-# 加载所有文档，并转换为向量
+# 经文档转换为向量
 def loadfile(filelist):
     vectors = []
     for i in filelist:
         vectors.append(prodata(i))
+        print(i + " is done.")
     return vectors
 
 
@@ -59,7 +59,7 @@ def ctable(vectors):
 
 
 # 计算tf-idf
-def doctfidf(doc, vectors, wordtable, filelist):
+def doctfidf(doc, vectors, wordtable):
     tfidfvector = []
     tf = 0
     idf = 0
@@ -68,7 +68,7 @@ def doctfidf(doc, vectors, wordtable, filelist):
         tfidfvector.append(0)
     for i in set(doc):
         tf = freq[i]
-        idf = math.log((len(filelist) + 1) / (filecount(i, vectors) + 1))
+        idf = math.log((len(vectors) + 1) / (filecount(i, vectors) + 1))
         tfidf = tf*idf
         tfidfvector[wordtable[i]] = tfidf
     return tfidfvector
@@ -89,7 +89,7 @@ def wordfreq(doc):
 def filecount(word, vectors):
     count = 0
     for i in vectors:
-        if word in i:
+        if word in set(i):
             count = count + 1
     return count
 
@@ -97,7 +97,9 @@ def filecount(word, vectors):
 def main():
     filepath = '..\\testdata'
     filelist = cata(filepath)
+    print("v begin")
     vectors = loadfile(filelist)
+    print("v end")
     wordtable = ctable(vectors)
     with open('data/wordtable.json', 'w') as f:
         json.dump(wordtable, f)
@@ -108,12 +110,12 @@ def main():
     f.close()
     for i in filelist:
         doc = prodata(i)
-        tfidfvector = doctfidf(doc, vectors, wordtable, filelist)
-        print(len(tfidfvector))
+        tfidfvector = doctfidf(doc, vectors, wordtable)
         with open('data/docs.txt', 'a') as f:
             for j in tfidfvector:
-                f.write(str(j)+',')
+                f.write(str(j) + ',')
             fp = i.split('\\')
+            print(fp[-2])
             if(fp[-2][:4] == 'comp'):
                 f.write('1')
             elif(fp[-2][:4] == 'misc'):
@@ -125,11 +127,13 @@ def main():
             elif(fp[-2][:4] == 'talk'):
                 if(fp[-2][5:13] == 'politics'):
                     f.write('5')
+                else:
+                    f.write('6')
             else:
                 f.write('6')
-            f.write('\n')
+            f.write("\n")
         f.close()
-        print(str(i) + ' is done.')
+        print(i + ' is done.')
     print("all done.")
 
 
