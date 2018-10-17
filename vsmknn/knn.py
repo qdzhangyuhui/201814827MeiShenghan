@@ -26,19 +26,27 @@ def loaddata(filepath):
     return vectors, label
 
 
-# 随机选出测试集
-def dataset(length):
-    n = length // 40
-    tests = random.sample(range(length), n)
-    return tests
+# 随机选出测试集 200
+def dataset():
+    n = 2
+    test = []
+    train = []
+    for i in range(20):
+        testi = random.sample(list(range(10*i, 10*(i+1))), n)
+        for j in testi:
+            test.append(j)
+    for i in range(200):
+        if i not in test:
+            train.append(i)
+    return train, test
 
 
 # knn分类器（利用余弦相似度划分）
-def classification(tests, vectors, label, k):
+def classification(train, test, vectors, label, k):
     results = []
     correct = 0
     leng = len(vectors[0])
-    for i in tests:
+    for i in test:
         result = []
         result.append(i)
         result.append(label[i])
@@ -46,18 +54,18 @@ def classification(tests, vectors, label, k):
         for j in range(k):
             topk.append(Cosine(-1, -1))
         minj = 0
-        for j in range(len(vectors)):
-            if j == i:
-                continue
+        for j in train:
             dot = 0
-            ''' Cosine '''
+            ''' Cosine
+            '''
             modi = modj = 0
             for m in range(leng):
                 dot = dot + vectors[i][m]*vectors[j][m]
                 modi = modi + pow(vectors[i][m], 2)
-                modj = modj + pow(vectors[i][m], 2)
+                modj = modj + pow(vectors[j][m], 2)
             cosine = dot / (math.sqrt(modi) * math.sqrt(modj))
             ''' Distance
+            ''''''
             for m in range(leng):
                 dot = dot + pow(vectors[i][m] - vectors[j][m],2)
             cosine = math.sqrt(dot)
@@ -88,17 +96,18 @@ def classification(tests, vectors, label, k):
             correct = correct + 1
         results.append(result)
         print(str(result[1]) == str(ma[0][0]))
-    return results, correct/len(results)
+    # return results, correct/len(results)
+    return correct/len(results)
 
 
 def main():
-    filepath = 'data/docs.txt'
+    filepath = 'data/tfidf.txt'
     vectors, label = loaddata(filepath)
-    tests = dataset(len(vectors))
-    print(tests)
-    knnn, ap = classification(tests, vectors, label, 5)
-    print(knnn)
-    print(ap)
+    train, test = dataset()
+    print(train, '\n', test)
+    knn, ap = classification(train, test, vectors, label, 3)
+	print(knn)
+	print(ap)
 
 
 if __name__ == "__main__":

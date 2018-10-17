@@ -105,32 +105,59 @@ def main():
         json.dump(wordtable, f)
         print("save wordtable done.")
     f.close()
-    with open('data/docs.txt', 'w') as f:
+    with open('data/tfidf.txt', 'w') as f:
         f.write("")
     f.close()
     for i in filelist:
         doc = prodata(i)
         tfidfvector = doctfidf(doc, vectors, wordtable)
-        with open('data/docs.txt', 'a') as f:
+        with open('data/tfidf.txt', 'a') as f:
             for j in tfidfvector:
                 f.write(str(j) + ',')
             fp = i.split('\\')
             print(fp[-2])
-            if(fp[-2][:4] == 'comp'):
+            if(fp[-2] == 'alt.atheism'):
                 f.write('1')
-            elif(fp[-2][:4] == 'misc'):
+            elif(fp[-2] == 'comp.graphics'):
                 f.write('2')
-            elif(fp[-2][:3] == 'rec'):
+            elif(fp[-2] == 'comp.os.ms-windows.misc'):
                 f.write('3')
-            elif(fp[-2][:3] == 'sci'):
+            elif(fp[-2] == 'comp.sys.ibm.pc.hardware'):
                 f.write('4')
-            elif(fp[-2][:4] == 'talk'):
-                if(fp[-2][5:13] == 'politics'):
-                    f.write('5')
-                else:
-                    f.write('6')
-            else:
+            elif(fp[-2] == 'comp.sys.mac.hardware'):
+                f.write('5')
+            elif(fp[-2] == 'comp.windows.x'):
                 f.write('6')
+            elif(fp[-2] == 'misc.forsale'):
+                f.write('7')
+            elif(fp[-2] == 'rec.autos'):
+                f.write('8')
+            elif(fp[-2] == 'rec.motorcycles'):
+                f.write('9')
+            elif(fp[-2] == 'rec.sport.baseball'):
+                f.write('10')
+            elif(fp[-2] == 'rec.sport.hockey'):
+                f.write('11')
+            elif(fp[-2] == 'sci.crypt'):
+                f.write('12')
+            elif(fp[-2] == 'sci.electronics'):
+                f.write('13')
+            elif(fp[-2] == 'sci.med'):
+                f.write('14')
+            elif(fp[-2] == 'sci.space'):
+                f.write('15')
+            elif(fp[-2] == 'soc.religion.christian'):
+                f.write('16')
+            elif(fp[-2] == 'talk.politics.guns'):
+                f.write('17')
+            elif(fp[-2] == 'talk.politics.mideast'):
+                f.write('18')
+            elif(fp[-2] == 'talk.politics.misc'):
+                f.write('19')
+            elif(fp[-2] == 'talk.religion.misc'):
+                f.write('20')
+            else:
+                f.write('0')
             f.write("\n")
         f.close()
         print(i + ' is done.')
