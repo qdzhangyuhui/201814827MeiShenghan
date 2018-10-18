@@ -108,7 +108,8 @@ def main():
     vectors, label = loaddata(filepath)
     train, test = dataset(label)
     print(train, '\n', test)
-    knn, ap = classification(train, test, vectors, label, 3)
+    k = math.ceil(len(label)/80)
+    knn, ap = classification(train, test, vectors, label, k)
     print(knn)
     print(ap)
 
