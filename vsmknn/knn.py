@@ -1,5 +1,6 @@
 import math
 import random
+from collections import Counter
 
 
 # 余弦相似度存放类
@@ -26,16 +27,19 @@ def loaddata(filepath):
     return vectors, label
 
 
-# 随机选出测试集 200
-def dataset():
-    n = 2
+# 随机选出测试集 20%
+def dataset(label):
     test = []
     train = []
-    for i in range(20):
-        testi = random.sample(list(range(10*i, 10*(i+1))), n)
-        for j in testi:
-            test.append(j)
-    for i in range(200):
+    num = Counter(label)
+    begin = 0
+    for k, v in num.items():
+        end = begin + v
+        testi = random.sample(list(range(begin, end)), v // 5)
+        for i in testi:
+            test.append(i)
+        begin = end
+    for i in range(len(label)):
         if i not in test:
             train.append(i)
     return train, test
@@ -102,7 +106,7 @@ def classification(train, test, vectors, label, k):
 def main():
     filepath = 'data/tfidf.txt'
     vectors, label = loaddata(filepath)
-    train, test = dataset()
+    train, test = dataset(label)
     print(train, '\n', test)
     knn, ap = classification(train, test, vectors, label, 3)
     print(knn)
