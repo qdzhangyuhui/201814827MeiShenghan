@@ -96,8 +96,7 @@ def classification(train, test, vectors, label, k):
             correct = correct + 1
         results.append(result)
         print(str(result[1]) == str(ma[0][0]))
-    # return results, correct/len(results)
-    return correct/len(results)
+    return results, correct/len(results)
 
 
 def main():
@@ -106,8 +105,8 @@ def main():
     train, test = dataset()
     print(train, '\n', test)
     knn, ap = classification(train, test, vectors, label, 3)
-	print(knn)
-	print(ap)
+    print(knn)
+    print(ap)
 
 
 if __name__ == "__main__":

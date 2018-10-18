@@ -22,7 +22,7 @@ def loadfile(filelist):
     vectors = []
     for i in filelist:
         vectors.append(prodata(i))
-        print(i + " is done.")
+        print(i + " is ok.")
     return vectors
 
 
@@ -95,11 +95,11 @@ def filecount(word, vectors):
 
 
 def main():
-    filepath = '..\\testdata'
+    filepath = '..\\data'
     filelist = cata(filepath)
-    print("v begin")
+    print("load begin")
     vectors = loadfile(filelist)
-    print("v end")
+    print("load end")
     wordtable = ctable(vectors)
     with open('data/wordtable.json', 'w') as f:
         json.dump(wordtable, f)
@@ -115,7 +115,6 @@ def main():
             for j in tfidfvector:
                 f.write(str(j) + ',')
             fp = i.split('\\')
-            print(fp[-2])
             if(fp[-2] == 'alt.atheism'):
                 f.write('1')
             elif(fp[-2] == 'comp.graphics'):
